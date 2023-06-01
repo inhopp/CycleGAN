@@ -70,7 +70,7 @@ class Solver():
                 img_B = img_B.to(self.dev)
 
                 # train Discriminator A
-                fake_A = self.generator_A(img_A)
+                fake_A = self.generator_A(img_B)
                 D_A_real = self.discriminator_A(img_A)
                 D_A_fake = self.discriminator_A(fake_A.detach())
 
@@ -81,7 +81,7 @@ class Solver():
                 D_A_loss = D_A_real_loss + D_A_fake_loss
 
                 # train Discriminator B
-                fake_B = self.generator_B(img_B)
+                fake_B = self.generator_B(img_A)
                 D_B_real = self.generator_B(img_B)
                 D_B_fake = self.generator_B(fake_B.detach())
 
@@ -104,8 +104,8 @@ class Solver():
                 G_B_loss = self.mse_loss(D_B_fake, torch.ones_like(D_B_fake))
 
                 # cycle loss
-                cycle_A = self.generator_A(fake_A)
-                cycle_B = self.generator_B(fake_B)
+                cycle_A = self.generator_A(fake_B)
+                cycle_B = self.generator_B(fake_A)
                 cycle_A_loss = self.l1_loss(img_A, cycle_A)
                 cycle_B_loss = self.l1_loss(img_B, cycle_B)
 
